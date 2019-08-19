@@ -3,7 +3,7 @@
 Office365 = {};
 
 Office365.requestCredential = function(options, credentialRequestCompleteCallback) {
-    console.log('requestCredential');
+    console.log('ue> requestCredential');
     console.log(options);
     console.log(credentialRequestCompleteCallback);
   try{
@@ -40,6 +40,7 @@ Office365.requestCredential = function(options, credentialRequestCompleteCallbac
   }
   catch(err)
   {
+    console.log('ERROR');
     console.log(err);
   }
 };
