@@ -7,6 +7,8 @@ let userAgent = 'Meteor';
 if (Meteor.release) { userAgent += `/${ Meteor.release }`; }
 
 const getAccessToken = function(query) {
+  console.log('getAccessToken');
+  try{
   const config = ServiceConfiguration.configurations.findOne({service: 'office365'});
   if (!config) { throw new ServiceConfiguration.ConfigError(); }
 
@@ -30,16 +32,24 @@ const getAccessToken = function(query) {
         }
       });
   } catch (error) {
+    console.log(error);
     throw _.extend(new Error(`Failed to complete OAuth handshake with Microsoft Office365. ${ error.message }`), {response: error.response});
   }
   if (response.data.error) {
+    console.log(response.data.error);
     throw new Error(`Failed to complete OAuth handshake with Microsoft Office365. ${ response.data.error }`);
   } else {
     return response.data.access_token;
   }
+  }
+  catch(err){
+    console.log(err);
+  }
+  return null;
 };
 
 const getIdentity = function(accessToken) {
+    console.log('getIdentity');
   try {
     return HTTP.get(
       'https://graph.microsoft.com/v1.0/me', {
@@ -50,15 +60,21 @@ const getIdentity = function(accessToken) {
         }
       }).data;
   } catch (error) {
+    console.log(error);
     throw _.extend(new Error(`Failed to fetch identity from Microsoft Office365. ${ error.message }`), {response: error.response});
   }
 };
 
 OAuth.registerService('office365', 2, null, function(query) {
+  console.log(`OAuth.registerService('office365',`);
+  try{
+    console.log(query);
   const accessToken = getAccessToken(query);
   const identity = getIdentity(accessToken);
+  console.log(accessToken);
+  console.log(identity);
 
-  return {
+  return  {
     serviceData: {
       id: identity.id,
       accessToken: OAuth.sealSecret(accessToken),
@@ -76,8 +92,20 @@ OAuth.registerService('office365', 2, null, function(query) {
     },
     options: {profile: {name: identity.givenName}}
   };
+  }
+  catch(err){
+    console.log(err);
+  }
+  return null;
 });
 
 Office365.retrieveCredential = function(credentialToken, credentialSecret) {
+  console.log(`OAuth.registerService('office365',`);
+  try{
   return OAuth.retrieveCredential(credentialToken, credentialSecret);
+  }
+  catch(err){
+    console.log(err);
+  }
+  return null;
 };
