@@ -7,7 +7,7 @@ let userAgent = 'Meteor';
 if (Meteor.release) { userAgent += `/${ Meteor.release }`; }
 
 const getAccessToken = function(query) {
-  console.log('getAccessToken');
+  console.log('ue> getAccessToken');
   try{
   const config = ServiceConfiguration.configurations.findOne({service: 'office365'});
   if (!config) { throw new ServiceConfiguration.ConfigError(); }
@@ -51,7 +51,7 @@ const getAccessToken = function(query) {
 };
 
 const getIdentity = function(accessToken) {
-    console.log('getIdentity');
+    console.log('ue> getIdentity');
   try {
     return HTTP.get(
       'https://graph.microsoft.com/v1.0/me', {
@@ -69,14 +69,15 @@ const getIdentity = function(accessToken) {
 };
 
 OAuth.registerService('office365', 2, null, function(query) {
-  console.log(`OAuth.registerService('office365',`);
+  console.log(`ue> OAuth.registerService('office365',`);
   try{
     console.log(query);
   const accessToken = getAccessToken(query);
   const identity = getIdentity(accessToken);
   console.log(accessToken);
   console.log(identity);
-
+  console.log(OAuth.sealSecret(accessToken));
+    console.log('ue> looking good');
   return  {
     serviceData: {
       id: identity.id,
@@ -104,7 +105,7 @@ OAuth.registerService('office365', 2, null, function(query) {
 });
 
 Office365.retrieveCredential = function(credentialToken, credentialSecret) {
-  console.log(`OAuth.registerService('office365',`);
+  console.log(`Office365.retrieveCredential`);
   try{
   return OAuth.retrieveCredential(credentialToken, credentialSecret);
   }
