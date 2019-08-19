@@ -32,10 +32,12 @@ const getAccessToken = function(query) {
         }
       });
   } catch (error) {
+    console.log('ERROR');
     console.log(error);
     throw _.extend(new Error(`Failed to complete OAuth handshake with Microsoft Office365. ${ error.message }`), {response: error.response});
   }
   if (response.data.error) {
+    console.log('ERROR');
     console.log(response.data.error);
     throw new Error(`Failed to complete OAuth handshake with Microsoft Office365. ${ response.data.error }`);
   } else {
@@ -60,6 +62,7 @@ const getIdentity = function(accessToken) {
         }
       }).data;
   } catch (error) {
+    console.log('ERROR');
     console.log(error);
     throw _.extend(new Error(`Failed to fetch identity from Microsoft Office365. ${ error.message }`), {response: error.response});
   }
@@ -94,6 +97,7 @@ OAuth.registerService('office365', 2, null, function(query) {
   };
   }
   catch(err){
+    console.log('ERROR');
     console.log(err);
   }
   return null;
@@ -105,6 +109,7 @@ Office365.retrieveCredential = function(credentialToken, credentialSecret) {
   return OAuth.retrieveCredential(credentialToken, credentialSecret);
   }
   catch(err){
+    console.log('ERROR');
     console.log(err);
   }
   return null;
