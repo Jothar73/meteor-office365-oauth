@@ -3,6 +3,10 @@
 Office365 = {};
 
 Office365.requestCredential = function(options, credentialRequestCompleteCallback) {
+    console.log('requestCredential');
+    console.log(options);
+    console.log(credentialRequestCompleteCallback);
+  try{
   if (!credentialRequestCompleteCallback && typeof options === 'function') {
     credentialRequestCompleteCallback = options;
     options = {};
@@ -33,4 +37,9 @@ Office365.requestCredential = function(options, credentialRequestCompleteCallbac
     credentialRequestCompleteCallback,
     credentialToken
   });
+  }
+  catch(err)
+  {
+    console.log(err);
+  }
 };
