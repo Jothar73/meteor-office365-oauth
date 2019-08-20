@@ -31,6 +31,8 @@ const getAccessToken = function(query) {
           state: query.state
         }
       });
+  console.log('ue> got response');
+  console.log('ue> response');
   } catch (error) {
     console.log('ERROR');
     console.log(error);
@@ -41,6 +43,7 @@ const getAccessToken = function(query) {
     console.log(response.data.error);
     throw new Error(`Failed to complete OAuth handshake with Microsoft Office365. ${ response.data.error }`);
   } else {
+  console.log('ue> all good');
     return response.data.access_token;
   }
   }
@@ -53,7 +56,7 @@ const getAccessToken = function(query) {
 const getIdentity = function(accessToken) {
     console.log('ue> getIdentity');
   try {
-    return HTTP.get(
+    const ident= HTTP.get(
       'https://graph.microsoft.com/v1.0/me', {
         headers: {
           Authorization: `Bearer ${ accessToken }`,
@@ -61,6 +64,10 @@ const getIdentity = function(accessToken) {
           'User-Agent': userAgent
         }
       }).data;
+    console.log('ue> got Identity');
+    console.log(ident);
+    
+    return ident;
   } catch (error) {
     console.log('ERROR');
     console.log(error);
@@ -107,7 +114,11 @@ OAuth.registerService('office365', 2, null, function(query) {
 Office365.retrieveCredential = function(credentialToken, credentialSecret) {
   console.log(`Office365.retrieveCredential`);
   try{
-  return OAuth.retrieveCredential(credentialToken, credentialSecret);
+  const cred = OAuth.retrieveCredential(credentialToken, credentialSecret);
+    
+    console.log('ue> got cred');
+    console.log(cred);
+    return cred;
   }
   catch(err){
     console.log('ERROR');
